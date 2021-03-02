@@ -8,11 +8,11 @@ garantiasFechamento = 14;
 dezenasAptas  = linspace(1, 25, 25);
 
 %%% Números julgados interessantes de se colocar no fechamento
-numeros_no_fechamento      = [5, 22];      
+numeros_no_fechamento      = [13];      
 size_numeros_no_fechamento = max(size(numeros_no_fechamento));
 
 %%% Números julgados NÃO interessantes de se colocar no fechamento
-numeros_excluidos_do_fechamento      = [3, 14];          
+numeros_excluidos_do_fechamento      = [23];          
 size_numeros_excluidos_do_fechamento = max(size(numeros_excluidos_do_fechamento));
 
 %%% Números que podem participar do sorteio. 
@@ -72,20 +72,41 @@ while(~flag)
     % Estatística do meu sistema em relação aos parâmetros que existem
     % dentro de cada conjunto de 5 parâmetros. 
     for i = 1:max(size(matriz))
-       cont(i)  = max(matriz{i}); 
-       cont2(i) = min(matriz{i}); 
+       contMAX_matricial(i) = max(matriz{i}); 
+       contMIN_matricial(i) = min(matriz{i}); 
     end
     
+    % =====================================================================
+    % Estatística para a soma das dezenas para exclusão das absurdas. 
+    contSoma = 0;
+    for i = 1:max(size(JOGO))
+        soma(i) = sum(JOGO{i});
+        if ( (soma(i) >= 160) & (soma(i) <= 230) )
+            contSoma = contSoma + 1;
+        end
+    end
+    % =====================================================================
+    
+    
     %%% Quantidade de conjuntos iguais (filtro matricial).
-    qntCinco = max(size(find(cont == 5)));
-    qntZero  = max(size(find(cont2 == 0)));
-    if ( ((qntCinco/max(size(cont))) < 0.25) && (qntZero/max(size(cont2)) < 0.008) )
+    qntCinco = max(size(find(contMAX_matricial == 5)));
+    qntZero  = max(size(find(contMIN_matricial == 0)));
+    if ( ((qntCinco/max(size(contMAX_matricial))) < 0.25) && (qntZero/max(size(contMIN_matricial)) < 0.015) && ...
+         (contSoma/max(size(soma)) <= 0.95 ) )
         flag = 1;
         disp(['Conseguimos selecionar!!!']);
+        disp(['% de 5: ' num2str(100*(qntCinco/max(size(contMAX_matricial)))) '%']);
+        disp(['% de 0: ' num2str(100*(qntZero/max(size(contMIN_matricial)))) '%']);
+        disp(['Percentual da soma: ' num2str(100*(contSoma/max(size(soma)))) '%']);
+        disp(' ');
     else
         %%% Contador de entradas
         contador = contador + 1;
         disp(['Estamos indo para mais uma seleção. Entrada: ' num2str(contador)]);
+        disp(['% de 5: ' num2str(100*(qntCinco/max(size(contMAX_matricial)))) '%']);
+        disp(['% de 0: ' num2str(100*(qntZero/max(size(contMIN_matricial)))) '%']);
+        disp(['Percentual da soma: ' num2str(100*(contSoma/max(size(soma)))) '%']);
+        disp(' ');
     end
 end
 

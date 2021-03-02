@@ -25,7 +25,7 @@ end
 fprintf(file, ']\n');
 
 %%% Números excluídos do fechamento.
-fprintf(file, 'Números pertencentes ao Fechamento: [');
+fprintf(file, 'Números excluídos do Fechamento: [');
 for i = 1:max(size(numeros_excluidos_do_fechamento))
     fprintf(file, '%3d ', numeros_excluidos_do_fechamento(i));
 end
